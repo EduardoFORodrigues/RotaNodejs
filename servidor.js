@@ -1,70 +1,45 @@
-const http = require("http");
-const fs = require("fs");
-const _ = require("lodash");
+const express = require('express');
+const _ = require('lodash');
+const app = express();
 
-const server = http.createServer((req, res) => {
-  console.log(req.url, req.method);
+// Configurando o EJS como engine de visualização
+app.set('view engine', 'ejs');
 
-  //definindo o tipo deconteúdo do cabeçalho
-  res.setHeader("Tipo-Conteudo", "texto/html");
+// Middleware para arquivos estáticos (caso tenha CSS, imagens, etc.)
+app.use(express.static('public'));
 
-  //caminho dos arquivos
-
-  let caminho = "./views/";
-
-  switch (req.url) {
-    case "/":
-      caminho += "index.html";
-      res.statusCode = 200;
-      break;
-
-    case "/servico":
-      caminho += "servico.html";
-      res.statusCode = 200;
-      break;
-
-    case "/tecnologias":
-      caminho += "tecnologias.html";
-      res.statusCode = 200;
-      break;
-
-    case "/contato":
-      caminho += "contato.html";
-      res.statusCode = 200;
-      break;
-
-    //redirecionamento
-    case "/contato":
-      res.statusCode = 301;
-      res.setHeader("Location", "/contato");
-      break;
-
-    default:
-      caminho += "404.html";
-      res.statusCode = 404;
-      break;
-  }
-
-  //enviando um arquivo html
-  fs.readFile(caminho, (err, data) => {
-    if (err) {
-      console.log(err);
-      res.end();
-    } else {
-      //res.write(data);
-      // res.end();
-      res.end(data); //ou forma de encurtar código
-    }
-  });
-});
-
+// Função lodash (executada apenas uma vez)
 const numero = _.random(0, 50);
 const saudacao = _.once(() => {
   console.log("Boas Vindas");
 });
 saudacao();
-console.log(numero);
+console.log(`Número aleatório: ${numero}`);
 
-server.listen(3009, "localhost", () => {
-  console.log("Ovindo o servidor na porta 3009");
+// Rotas
+app.get('/', (req, res) => {
+  res.status(200).render('index');
+});
+
+app.get('/servico', (req, res) => {
+  res.status(200).render('servico');
+});
+
+app.get('/tecnologias', (req, res) => {
+  res.status(200).render('tecnologias');
+});
+
+app.get('/contato', (req, res) => {
+  res.status(200).render('contato');
+});
+
+// Rota 404 (deve ser a última)
+app.use((req, res) => {
+  res.status(404).render('404');
+});
+
+// Iniciando o servidor
+const PORT = 3009;
+app.listen(PORT, () => {
+  console.log(`Ouvindo o servidor na porta ${PORT}`);
 });
