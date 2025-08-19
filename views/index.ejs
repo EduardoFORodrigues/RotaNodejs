@@ -76,12 +76,8 @@
 
  
   <%- include('./parciais/header.ejs') %>
-  
-    <nav>
-      <a href="./servico">Serviços</a>
-      <a href="./tecnologias">Tecnologias</a>
-      <a href="./contato">Contato</a>
-    </nav>
+  <%- include('./parciais/nav.ejs') %>
+ 
   
     <section id="servicos" class="services">
       <h2>Serviços Oferecidos</h2>
@@ -125,8 +121,6 @@
       </p>
     </section>
 
-    <footer>
-      <p>&copy; 2025 FrontTech - Todos os direitos reservados.</p>
-    </footer>
+     <%- include('./parciais/footer.ejs') %>
   </body>
 </html>
